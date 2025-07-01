@@ -49,47 +49,46 @@ def generate_invoice(data: InvoiceData):
     c = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
 
-    # 🔹 Draw background image
+    # 🔹 Background
     bg_path = os.path.join(os.path.dirname(__file__), "invoicebg.jpg")
     c.drawImage(ImageReader(bg_path), 0, 0, width=width, height=height)
 
-    # 🔹 Heading
+    # 🔹 Main Heading
     c.setFont("Helvetica-Bold", 14)
     c.drawCentredString(width / 2, 810, "INVOICE CUM PACKING LIST")
-    c.setFont("Helvetica", 8)
 
-    # 🔹 Labeled Metadata (coordinates preserved)
+    # 🔹 Metadata (right side, exact positions)
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 725, "Invoice No. :")
+    c.drawString(300, 725, "Invoice No.:")
     c.setFont("Helvetica", 8)
     c.drawString(420, 725, data.invoice_no or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 660, "Invoice Date :")
+    c.drawString(300, 660, "Invoice Date:")
     c.setFont("Helvetica", 8)
     c.drawString(420, 660, data.invoice_date or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(120, 550, "I.E. Code No. :")
+    c.drawString(190, 560, "I.E. Code No.:")
     c.setFont("Helvetica", 8)
-    c.drawString(200, 550, data.ie_code or "")
+    c.drawString(210, 540, data.ie_code or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 600, "Buyer's Order No. :")
+    c.drawString(300, 600, "Buyer's Order No.:")
     c.setFont("Helvetica", 8)
     c.drawString(420, 600, data.buyer_order or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 550, "Port of Loading :")
+    c.drawString(300, 550, "Port of Loading:")
     c.setFont("Helvetica", 8)
     c.drawString(420, 550, data.port_of_loading or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 570, "Vessel No. :")
+    c.drawString(300, 570, "Vessel No.:")
     c.setFont("Helvetica", 8)
     c.drawString(420, 570, data.vessel_no or "")
 
-    # 🔹 Multiline text blocks
+    # 🔹 Multiline Blocks
     def draw_multiline(text, x, y_start):
         for i, line in enumerate(text.splitlines()):
             c.drawString(x, y_start - i * 10, line)
@@ -109,15 +108,34 @@ def generate_invoice(data: InvoiceData):
     c.setFont("Helvetica", 8)
     draw_multiline(data.notify_party, 50, 550)
 
-    # 🔹 Metadata rows (bottom left block)
+    # 🔹 Metadata (bottom left)
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(50, 530, "Pre-Carriage By:")
     c.setFont("Helvetica", 8)
-    c.drawString(50, 530, f"Pre-Carriage By: {data.pre_carriage_by}")
-    c.drawString(190, 530, f"Place of Receipt: {data.place_of_receipt}")
-    c.drawString(310, 515, f"Country of Final Destination: {data.country_of_final_destination}")
-    c.drawString(190, 500, f"Port of Discharge: {data.port_of_discharge}")
-    c.drawString(50, 500, f"Terms of Payment: {data.terms_of_payment}")
+    c.drawString(100, 518, data.pre_carriage_by or "")  # ⬇️ shifted down
 
-    # 🔹 Goods Table Header
+    
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(190, 530, "Place of Receipt:")
+    c.setFont("Helvetica", 8)
+    c.drawString(190, 518, data.place_of_receipt or "")  # ⬇️ shifted down
+
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(310, 515, "Country of Final Destination:")
+    c.setFont("Helvetica", 8)
+    c.drawString(460, 503, data.country_of_final_destination or "")  # ⬇️ shifted down
+
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(190, 500, "Port of Discharge:")
+    c.setFont("Helvetica", 8)
+    c.drawString(250, 490, data.port_of_discharge or "")
+
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(50, 500, "Terms of Payment:")
+    c.setFont("Helvetica", 8)
+    c.drawString(140, 490, data.terms_of_payment or "")
+
+    # 🔹 Table Header
     c.setFont("Helvetica-Bold", 8)
     c.drawString(45, 465, "Sr No.")
     c.drawString(200, 465, "Description of Goods")
@@ -125,16 +143,16 @@ def generate_invoice(data: InvoiceData):
     c.drawString(425, 465, "Rate per")
     c.drawString(510, 465, "Amount (USD)")
 
-    # 🔹 Goods Data Rows
+    # 🔹 Table Rows — refined to prevent line overlap
     c.setFont("Helvetica", 7.5)
-    goods_y = 450
+    goods_y = 420  # ⬆️ raised slightly for better vertical centering
     for item in data.goods:
-        c.drawString(45, goods_y, item.sr_no)
-        c.drawString(85, goods_y, item.description)
-        c.drawString(300, goods_y, item.units)
-        c.drawString(370, goods_y, item.rate)
-        c.drawString(440, goods_y, item.amount)
-        goods_y -= 15
+     c.drawString(45, goods_y, item.sr_no)
+     c.drawString(85, goods_y, item.description)
+     c.drawString(300, goods_y, item.units)
+     c.drawString(370, goods_y, item.rate)
+     c.drawString(440, goods_y, item.amount)
+     goods_y -= 30  # keep consistent row spacing for full block alignment
 
     # 🔹 Declaration
     c.setFont("Helvetica-Bold", 8)
@@ -151,7 +169,7 @@ def generate_invoice(data: InvoiceData):
     c.line(width - 150, 60, width - 40, 60)
     c.drawRightString(width - 40, 50, "Authorised Signatory")
 
-    # 🔹 Footer Branding
+    # 🔹 Footer
     c.setFont("Helvetica-Bold", 6)
     c.drawCentredString((width / 2) - 50, 25, "CODEX AUTOMATION KEY • docwise.codexautomationkey.com")
 

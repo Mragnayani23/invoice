@@ -5,6 +5,7 @@ from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.utils import ImageReader
+import os
 
 app = FastAPI()
 
@@ -48,43 +49,68 @@ def generate_invoice(data: InvoiceData):
     c = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
 
-    # Draw background image
-    import os
+    # 🔹 Draw background image
     bg_path = os.path.join(os.path.dirname(__file__), "invoicebg.jpg")
-
     c.drawImage(ImageReader(bg_path), 0, 0, width=width, height=height)
 
     # 🔹 Heading
     c.setFont("Helvetica-Bold", 14)
     c.drawCentredString(width / 2, 810, "INVOICE CUM PACKING LIST")
-
     c.setFont("Helvetica", 8)
 
-    # 🔹 Invoice metadata (right)
-    fields = [
-        (data.invoice_no, 420, 725),
-        (data.invoice_date, 420, 660),
-        (data.ie_code, 200, 550),
-        (data.buyer_order, 420, 600),
-        (data.port_of_loading, 420, 550),
-        (data.vessel_no, 420, 570),
-        
-       
-       
-    ]
-    for val, x, y in fields:
-        c.drawString(x, y, val)
+    # 🔹 Labeled Metadata (coordinates preserved)
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(300, 725, "Invoice No. :")
+    c.setFont("Helvetica", 8)
+    c.drawString(420, 725, data.invoice_no or "")
+
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(300, 660, "Invoice Date :")
+    c.setFont("Helvetica", 8)
+    c.drawString(420, 660, data.invoice_date or "")
+
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(120, 550, "I.E. Code No. :")
+    c.setFont("Helvetica", 8)
+    c.drawString(200, 550, data.ie_code or "")
+
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(300, 600, "Buyer's Order No. :")
+    c.setFont("Helvetica", 8)
+    c.drawString(420, 600, data.buyer_order or "")
+
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(300, 550, "Port of Loading :")
+    c.setFont("Helvetica", 8)
+    c.drawString(420, 550, data.port_of_loading or "")
+
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(300, 570, "Vessel No. :")
+    c.setFont("Helvetica", 8)
+    c.drawString(420, 570, data.vessel_no or "")
 
     # 🔹 Multiline text blocks
     def draw_multiline(text, x, y_start):
         for i, line in enumerate(text.splitlines()):
             c.drawString(x, y_start - i * 10, line)
 
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(50, 710, "Exporter:")
+    c.setFont("Helvetica", 8)
     draw_multiline(data.exporter, 50, 700)
+
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(50, 610, "Consignee:")
+    c.setFont("Helvetica", 8)
     draw_multiline(data.consignee, 50, 600)
+
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(50, 560, "Notify Party:")
+    c.setFont("Helvetica", 8)
     draw_multiline(data.notify_party, 50, 550)
 
-    # 🔹 New metadata (preserving coordinates)
+    # 🔹 Metadata rows (bottom left block)
+    c.setFont("Helvetica", 8)
     c.drawString(50, 530, f"Pre-Carriage By: {data.pre_carriage_by}")
     c.drawString(190, 530, f"Place of Receipt: {data.place_of_receipt}")
     c.drawString(310, 515, f"Country of Final Destination: {data.country_of_final_destination}")
@@ -94,7 +120,7 @@ def generate_invoice(data: InvoiceData):
     # 🔹 Goods Table Header
     c.setFont("Helvetica-Bold", 8)
     c.drawString(45, 465, "Sr No.")
-    c.drawString(200 ,465, "Description of Goods")
+    c.drawString(200, 465, "Description of Goods")
     c.drawString(370, 465, "No. of Units")
     c.drawString(425, 465, "Rate per")
     c.drawString(510, 465, "Amount (USD)")

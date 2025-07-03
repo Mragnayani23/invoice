@@ -210,7 +210,7 @@ def generate_invoice(data: InvoiceData):
     y_decl = 115
     for line in data.declaration.splitlines():
         c.drawString(60, y_decl, line)
-        y_decl -= 10
+        y_decl -= 15
 
     # 🔹 Signature
     c.setFont("Helvetica", 8)

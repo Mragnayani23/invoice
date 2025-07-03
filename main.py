@@ -34,6 +34,7 @@ class InvoiceData(BaseModel):
     pre_carriage_by: str
     place_of_receipt: str
     country_of_final_destination: str
+    country_origin: str  
     port_of_discharge: str
     terms_of_payment: str
     goods: List[Item]
@@ -127,10 +128,7 @@ def generate_invoice(data: InvoiceData):
     c.setFont("Helvetica", 8)
     c.drawString(430, 503, data.terms_of_payment or "")  # ⬇️ shifted down
 
-    c.setFont("Helvetica-Bold", 8)
-    c.drawString(165, 500, "Terms of Payment:")
-    c.setFont("Helvetica", 8)
-    c.drawString(220, 490, data.terms_of_payment or "")
+   
 
     c.setFont("Helvetica-Bold", 8)
     c.drawString(30, 500, "Port of Discharge:")

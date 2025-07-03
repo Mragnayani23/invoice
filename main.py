@@ -69,9 +69,9 @@ def generate_invoice(data: InvoiceData):
     c.drawString(420, 660, data.invoice_date or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(165, 560, "I.E. Code No.:")
+    c.drawString(165, 560, "Place of Receipt:")
     c.setFont("Helvetica", 8)
-    c.drawString(210, 540, data.ie_code or "")
+    c.drawString(210, 540, data.place_of_receipt or "")
 
     c.setFont("Helvetica-Bold", 8)
     c.drawString(300, 645, "Buyer's Order No.:")
@@ -84,7 +84,7 @@ def generate_invoice(data: InvoiceData):
     c.drawString(420, 550, data.port_of_loading or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 590, "Vessel No.:")
+    c.drawString(30, 530,  "Vessel/Voyage:")
     c.setFont("Helvetica", 8)
     c.drawString(420, 570, data.vessel_no or "")
 
@@ -104,26 +104,26 @@ def generate_invoice(data: InvoiceData):
     draw_multiline(data.consignee, 50, 600)
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(30, 560, "Notify Party:")
+    c.drawString(30, 560, "Pre-Carriage By:")
     c.setFont("Helvetica", 8)
-    draw_multiline(data.notify_party, 50, 550)
+    c.drawString(70, 518, data.pre_carriage_by or "")
 
     # 🔹 Metadata (bottom left)
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(30, 530, "Pre-Carriage By:")
+    c.drawString(30, 530,  "Notify Party:")
     c.setFont("Helvetica", 8)
-    c.drawString(70, 518, data.pre_carriage_by or "")  # ⬇️ shifted down
+    draw_multiline(data.notify_party, 50, 550)
 
     
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(165, 530, "Place of Receipt:")
+    c.drawString(165, 530, "Port of Loading:")
     c.setFont("Helvetica", 8)
-    c.drawString(220, 518, data.place_of_receipt or "")  # ⬇️ shifted down
+    c.drawString(data.port_of_loading or "")  # ⬇️ shifted down
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 530, "Country of Final Destination:")
+    c.drawString(165, 500, "Country of Final Destination:")
     c.setFont("Helvetica", 8)
-    c.drawString(430, 503, data.country_of_final_destination or "")  # ⬇️ shifted down
+    c.drawString(220, 490,data.country_of_final_destination or "")  # ⬇️ shifted down
 
     c.setFont("Helvetica-Bold", 8)
     c.drawString(165, 500, "Port of Discharge:")
@@ -131,9 +131,9 @@ def generate_invoice(data: InvoiceData):
     c.drawString(220, 490, data.port_of_discharge or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(30, 500, "Terms of Payment:")
+    c.drawString(165, 500, "Terms of Payment:")
     c.setFont("Helvetica", 8)
-    c.drawString(70, 490, data.terms_of_payment or "")
+    c.drawString(220, 490, data.terms_of_payment or "")
 
     # 🔹 Table Header
     c.setFont("Helvetica-Bold", 8)

@@ -63,7 +63,7 @@ def generate_invoice(data: InvoiceData):
     c.setFont("Helvetica-Bold", 14)
     c.drawCentredString(width / 2, 810, "INVOICE CUM PACKING LIST")
 
-    # 🔹 Metadata (right side, exact positions)
+    # 🔹 Metadata (right side)
     c.setFont("Helvetica-Bold", 8)
     c.drawString(300, 730, "Invoice No.:")
     c.drawString(300, 720, "I.E. Code No.:")
@@ -77,26 +77,21 @@ def generate_invoice(data: InvoiceData):
     c.drawString(420, 660, data.buyer_order or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(165, 560, "Place of Receipt:")
-    c.setFont("Helvetica", 8)
-    c.drawString(210, 540, data.place_of_receipt or "")
-
-    c.setFont("Helvetica-Bold", 8)
     c.drawString(300, 645, "Notify Party:")
     c.setFont("Helvetica", 8)
     c.drawString(420, 600, data.notify_party or "")
-
-    c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 560, "Country of final destination")
-    c.setFont("Helvetica", 8)
-    c.drawString(420, 550, data.country_of_final_destination or "")
 
     c.setFont("Helvetica-Bold", 8)
     c.drawString(300, 590, "Country of Origin")
     c.setFont("Helvetica", 8)
     c.drawString(420, 570, data.country_origin or "")
 
-    # 🔹 Multiline Blocks
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(300, 560, "Country of final destination")
+    c.setFont("Helvetica", 8)
+    c.drawString(420, 550, data.country_of_final_destination or "")
+
+    # 🔹 Left-side multiline fields
     def draw_multiline(text, x, y_start):
         for i, line in enumerate(text.splitlines()):
             c.drawString(x, y_start - i * 10, line)
@@ -116,22 +111,21 @@ def generate_invoice(data: InvoiceData):
     c.setFont("Helvetica", 8)
     draw_multiline(data.pre_carriage_by, 50, 550)
 
-    # 🔹 Metadata (bottom left)
+    # 🔹 Bottom metadata
     c.setFont("Helvetica-Bold", 8)
     c.drawString(30, 530, "Vessel/Voyage")
     c.setFont("Helvetica", 8)
-    c.drawString(70, 518, data.vessel_no or "")  # ⬇️ shifted down
+    c.drawString(70, 518, data.vessel_no or "")
 
-    
     c.setFont("Helvetica-Bold", 8)
     c.drawString(165, 530, "Port of Loading")
     c.setFont("Helvetica", 8)
-    c.drawString(220, 518, data.port_of_loading or "")  # ⬇️ shifted down
+    c.drawString(220, 518, data.port_of_loading or "")
 
     c.setFont("Helvetica-Bold", 8)
     c.drawString(300, 530, "Terms of Payment ")
     c.setFont("Helvetica", 8)
-    c.drawString(430, 503, data.terms_of_payment or "")  # ⬇️ shifted down
+    c.drawString(430, 503, data.terms_of_payment or "")
 
     c.setFont("Helvetica-Bold", 8)
     c.drawString(165, 500, "Final Destination")
@@ -151,26 +145,25 @@ def generate_invoice(data: InvoiceData):
     c.drawString(425, 465, "Rate per")
     c.drawString(510, 465, "Amount (USD)")
 
-    # 🔹 Table Rows — refined to prevent line overlap
+    # 🔹 Table Rows
     c.setFont("Helvetica", 7.5)
-    goods_y = 400  # ⬆️ raised slightly for better vertical centering
+    goods_y = 400
     for item in data.goods:
-     c.drawString(45, goods_y, item.sr_no)
-     c.drawString(155, goods_y, item.description)
-     c.drawString(370, goods_y, item.units)
-     c.drawString(420, goods_y, item.rate)
-     c.drawString(510, goods_y, item.amount)
-     goods_y -= 30  # keep consistent row spacing for full block alignment
+        c.drawString(45, goods_y, item.sr_no)
+        c.drawString(155, goods_y, item.description)
+        c.drawString(370, goods_y, item.units)
+        c.drawString(420, goods_y, item.rate)
+        c.drawString(510, goods_y, item.amount)
+        goods_y -= 30
 
-
-     # 🔸 Amount Chargeable Row
+    # 🔹 Amount Chargeable
     c.setFont("Helvetica-Bold", 8)
     c.drawString(45, goods_y, "Amount Chargeable:")
     c.setFont("Helvetica", 8)
     c.drawString(160, goods_y, data.amount_chargeable)
     goods_y -= 20
 
-# 🔸 Additional Info Row
+    # 🔹 Extra Metadata
     c.setFont("Helvetica-Bold", 8)
     c.drawString(45, goods_y, "BIN NO:")
     c.setFont("Helvetica", 8)
@@ -191,26 +184,16 @@ def generate_invoice(data: InvoiceData):
     c.setFont("Helvetica", 8)
     c.drawString(200, goods_y - 30, data.shipment_under_alq)
 
-    goods_y -= 50  # Adjust for total height of this block
+    goods_y -= 50
 
-
+    # 🔹 Declaration (Adjusted)
+    y_decl = goods_y - 15
     c.setFont("Helvetica-Bold", 8)
     c.drawCentredString(width / 2, goods_y, "DECLARATION")
     c.setFont("Helvetica", 7)
     for line in data.declaration.splitlines():
-     c.drawString(60, y_decl, line)
-    y_decl -= 10
-
-
-
-    # 🔹 Declaration
-    c.setFont("Helvetica-Bold", 8)
-    c.drawCentredString(width / 2, 130, "DECLARATION")
-    c.setFont("Helvetica", 7)
-    y_decl = 115
-    for line in data.declaration.splitlines():
         c.drawString(60, y_decl, line)
-        y_decl -= 15
+        y_decl -= 10
 
     # 🔹 Signature
     c.setFont("Helvetica", 8)
@@ -222,6 +205,7 @@ def generate_invoice(data: InvoiceData):
     c.setFont("Helvetica-Bold", 6)
     c.drawCentredString((width / 2) - 50, 25, "CODEX AUTOMATION KEY • docwise.codexautomationkey.com")
 
+    # Finalize
     c.save()
     buffer.seek(0)
     return Response(
@@ -229,3 +213,4 @@ def generate_invoice(data: InvoiceData):
         media_type="application/pdf",
         headers={"Content-Disposition": "attachment; filename=invoice_codex.pdf"}
     )
+

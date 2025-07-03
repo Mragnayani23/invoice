@@ -59,32 +59,32 @@ def generate_invoice(data: InvoiceData):
 
     # 🔹 Metadata (right side, exact positions)
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 725, "Invoice No.:")
+    c.drawString(300, 730, "Invoice No.:")
     c.setFont("Helvetica", 8)
     c.drawString(420, 725, data.invoice_no or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 660, "Invoice Date:")
+    c.drawString(300, 685, "Invoice Date:")
     c.setFont("Helvetica", 8)
     c.drawString(420, 660, data.invoice_date or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(190, 560, "I.E. Code No.:")
+    c.drawString(165, 560, "I.E. Code No.:")
     c.setFont("Helvetica", 8)
     c.drawString(210, 540, data.ie_code or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 600, "Buyer's Order No.:")
+    c.drawString(300, 645, "Buyer's Order No.:")
     c.setFont("Helvetica", 8)
     c.drawString(420, 600, data.buyer_order or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 550, "Port of Loading:")
+    c.drawString(300, 560, "Port of Loading:")
     c.setFont("Helvetica", 8)
     c.drawString(420, 550, data.port_of_loading or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 570, "Vessel No.:")
+    c.drawString(300, 590, "Vessel No.:")
     c.setFont("Helvetica", 8)
     c.drawString(420, 570, data.vessel_no or "")
 
@@ -94,46 +94,46 @@ def generate_invoice(data: InvoiceData):
             c.drawString(x, y_start - i * 10, line)
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(50, 710, "Exporter:")
+    c.drawString(20, 760, "Exporter:")
     c.setFont("Helvetica", 8)
     draw_multiline(data.exporter, 50, 700)
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(50, 610, "Consignee:")
+    c.drawString(30, 645, "Consignee:")
     c.setFont("Helvetica", 8)
     draw_multiline(data.consignee, 50, 600)
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(50, 560, "Notify Party:")
+    c.drawString(30, 560, "Notify Party:")
     c.setFont("Helvetica", 8)
     draw_multiline(data.notify_party, 50, 550)
 
     # 🔹 Metadata (bottom left)
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(50, 530, "Pre-Carriage By:")
+    c.drawString(30, 530, "Pre-Carriage By:")
     c.setFont("Helvetica", 8)
-    c.drawString(100, 518, data.pre_carriage_by or "")  # ⬇️ shifted down
+    c.drawString(70, 518, data.pre_carriage_by or "")  # ⬇️ shifted down
 
     
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(190, 530, "Place of Receipt:")
+    c.drawString(165, 530, "Place of Receipt:")
     c.setFont("Helvetica", 8)
-    c.drawString(190, 518, data.place_of_receipt or "")  # ⬇️ shifted down
+    c.drawString(220, 518, data.place_of_receipt or "")  # ⬇️ shifted down
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(310, 515, "Country of Final Destination:")
+    c.drawString(300, 530, "Country of Final Destination:")
     c.setFont("Helvetica", 8)
-    c.drawString(460, 503, data.country_of_final_destination or "")  # ⬇️ shifted down
+    c.drawString(430, 503, data.country_of_final_destination or "")  # ⬇️ shifted down
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(190, 500, "Port of Discharge:")
+    c.drawString(165, 500, "Port of Discharge:")
     c.setFont("Helvetica", 8)
-    c.drawString(250, 490, data.port_of_discharge or "")
+    c.drawString(220, 490, data.port_of_discharge or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(50, 500, "Terms of Payment:")
+    c.drawString(30, 500, "Terms of Payment:")
     c.setFont("Helvetica", 8)
-    c.drawString(140, 490, data.terms_of_payment or "")
+    c.drawString(70, 490, data.terms_of_payment or "")
 
     # 🔹 Table Header
     c.setFont("Helvetica-Bold", 8)
@@ -145,13 +145,13 @@ def generate_invoice(data: InvoiceData):
 
     # 🔹 Table Rows — refined to prevent line overlap
     c.setFont("Helvetica", 7.5)
-    goods_y = 420  # ⬆️ raised slightly for better vertical centering
+    goods_y = 400  # ⬆️ raised slightly for better vertical centering
     for item in data.goods:
      c.drawString(45, goods_y, item.sr_no)
-     c.drawString(85, goods_y, item.description)
-     c.drawString(300, goods_y, item.units)
-     c.drawString(370, goods_y, item.rate)
-     c.drawString(440, goods_y, item.amount)
+     c.drawString(155, goods_y, item.description)
+     c.drawString(370, goods_y, item.units)
+     c.drawString(420, goods_y, item.rate)
+     c.drawString(510, goods_y, item.amount)
      goods_y -= 30  # keep consistent row spacing for full block alignment
 
     # 🔹 Declaration

@@ -34,7 +34,7 @@ class InvoiceData(BaseModel):
     pre_carriage_by: str
     place_of_receipt: str
     country_of_final_destination: str
-    country_origin: str  
+    country_origin: str 
     port_of_discharge: str
     terms_of_payment: str
     goods: List[Item]
@@ -74,7 +74,7 @@ def generate_invoice(data: InvoiceData):
     c.setFont("Helvetica-Bold", 8)
     c.drawString(165, 560, "Place of Receipt:")
     c.setFont("Helvetica", 8)
-    c.drawString(210, 540, data.ie_code or "")
+    c.drawString(210, 540, data.place_of_receipt or "")
 
     c.setFont("Helvetica-Bold", 8)
     c.drawString(300, 645, "Notify Party:")
@@ -82,9 +82,9 @@ def generate_invoice(data: InvoiceData):
     c.drawString(420, 600, data.notify_party or "")
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 560, "Port of Loading:")
+    c.drawString(300, 560, "Country of final destination")
     c.setFont("Helvetica", 8)
-    c.drawString(420, 550, data.port_of_loading or "")
+    c.drawString(420, 550, data.country_of_final_destination or "")
 
     c.setFont("Helvetica-Bold", 8)
     c.drawString(300, 590, "Country of Origin")
@@ -119,21 +119,24 @@ def generate_invoice(data: InvoiceData):
 
     
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(165, 530, "Country of Final Destination:")
+    c.drawString(165, 530, "Port of Loading")
     c.setFont("Helvetica", 8)
-    c.drawString(220, 518, data.country_of_final_destination or "")  # ⬇️ shifted down
+    c.drawString(220, 518, data.port_of_loading or "")  # ⬇️ shifted down
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(300, 530, "Terms of Payment:")
+    c.drawString(300, 530, "Terms of Payment ")
     c.setFont("Helvetica", 8)
     c.drawString(430, 503, data.terms_of_payment or "")  # ⬇️ shifted down
 
-   
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(165, 500, "Final Destination")
+    c.setFont("Helvetica", 8)
+    c.drawString(220, 490, data.final_destination or "")
 
     c.setFont("Helvetica-Bold", 8)
     c.drawString(30, 500, "Port of Discharge:")
     c.setFont("Helvetica", 8)
-    c.drawString(70, 490, data.terms_of_payment or "")
+    c.drawString(70, 490, data.port_of_discharge or "")
 
     # 🔹 Table Header
     c.setFont("Helvetica-Bold", 8)

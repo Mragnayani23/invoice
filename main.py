@@ -94,7 +94,7 @@ def generate_invoice(data: InvoiceData):
             c.drawString(x, y_start - i * 10, line)
 
     c.setFont("Helvetica-Bold", 8)
-    c.drawString(30, 700, "Exporter:")
+    c.drawString(30, 730, "Exporter:")
     c.setFont("Helvetica", 8)
     draw_multiline(data.exporter, 50, 700)
 

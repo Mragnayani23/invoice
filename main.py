@@ -37,6 +37,11 @@ class InvoiceData(BaseModel):
     country_origin: str 
     port_of_discharge: str
     terms_of_payment: str
+    amount_chargeable: str
+    bin_no: str
+    drawback_sr_no: str
+    benefits_under_mems: str
+    shipment_under_alq: str
     goods: List[Item]
     declaration: str
 
@@ -156,6 +161,47 @@ def generate_invoice(data: InvoiceData):
      c.drawString(420, goods_y, item.rate)
      c.drawString(510, goods_y, item.amount)
      goods_y -= 30  # keep consistent row spacing for full block alignment
+
+
+     # 🔸 Amount Chargeable Row
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(45, goods_y, "Amount Chargeable:")
+    c.setFont("Helvetica", 8)
+    c.drawString(160, goods_y, data.amount_chargeable)
+    goods_y -= 20
+
+# 🔸 Additional Info Row
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(45, goods_y, "BIN NO:")
+    c.setFont("Helvetica", 8)
+    c.drawString(90, goods_y, data.bin_no)
+
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(200, goods_y, "Drawback Sr. No.:")
+    c.setFont("Helvetica", 8)
+    c.drawString(300, goods_y, data.drawback_sr_no)
+
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(45, goods_y - 15, "Benefits under MEMS scheme:")
+    c.setFont("Helvetica", 8)
+    c.drawString(200, goods_y - 15, data.benefits_under_mems)
+
+    c.setFont("Helvetica-Bold", 8)
+    c.drawString(45, goods_y - 30, "Shipment under ALQ scheme:")
+    c.setFont("Helvetica", 8)
+    c.drawString(200, goods_y - 30, data.shipment_under_alq)
+
+    goods_y -= 50  # Adjust for total height of this block
+
+
+    c.setFont("Helvetica-Bold", 8)
+    c.drawCentredString(width / 2, goods_y, "DECLARATION")
+    c.setFont("Helvetica", 7)
+    for line in data.declaration.splitlines():
+     c.drawString(60, y_decl, line)
+    y_decl -= 10
+
+
 
     # 🔹 Declaration
     c.setFont("Helvetica-Bold", 8)
